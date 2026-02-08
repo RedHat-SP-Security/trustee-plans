@@ -1,0 +1,21 @@
+# used in
+# https://gitlab.com/redhat/centos-stream/rpms/trustee.git
+summary: test plan for kbs gating testing
+
+
+prepare:
+  - how: shell
+    script:
+     - systemctl disable --now dnf-makecache.service || true
+     - systemctl disable --now dnf-makecache.timer || true
+     - dnf makecache
+
+discover:
+  - name: Upstream_tests_kbs
+    how: fmf
+    url: https://github.com/RedHat-SP-Security/trustee-tests.git
+    ref: main
+    filter: tag:CI-Tier-1
+
+execute:
+    how: tmt
